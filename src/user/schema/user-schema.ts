@@ -18,7 +18,7 @@ export class User extends mongoose.Document {
   lastName: string;
   email: string;
   password: string;
-  deleted: boolean;
+  isDeleted: boolean;
   comparePassword: (password: string) => Promise<boolean>;
   getEncryptedPassword: (password: string) => Promise<string>;
 
@@ -57,7 +57,7 @@ export const UserSchema = new mongoose.Schema<User>(
       type: Array<Role>,
       default: Role.USER
     },
-    $isDeleted: {
+    isDeleted: {
       type: Boolean,
       default: false
     }

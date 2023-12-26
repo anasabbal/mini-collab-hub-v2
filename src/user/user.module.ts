@@ -22,6 +22,6 @@ import { RoleGuard } from 'src/auth/guard/role-guard';
   ],
   controllers: [UserController],
   providers: [UserService, RoleGuard],
-  exports: [MongooseModule], // Add this line
+  exports: [MongooseModule], 
 })
 export class UserModule {}
