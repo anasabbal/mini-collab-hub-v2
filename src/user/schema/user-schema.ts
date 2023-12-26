@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import * as bcrypt from 'bcrypt';
 import { UserService } from "../user-service";
+import { Role } from "src/enums/role.enums";
 
 
 
@@ -20,6 +21,12 @@ export class User extends mongoose.Document {
   deleted: boolean;
   comparePassword: (password: string) => Promise<boolean>;
   getEncryptedPassword: (password: string) => Promise<string>;
+
+  async compareEncryptedPassword(password: string): Promise<boolean> {
+    const isMatch = bcrypt.compare(password, this.password);
+    console.log(isMatch);
+    return isMatch;
+  }
 }
 
 export const UserSchema = new mongoose.Schema<User>(
@@ -46,10 +53,14 @@ export const UserSchema = new mongoose.Schema<User>(
       required: [true, 'Password can not be empty'],
       minlength: [6, 'Password should include at least 6 chars'],
     },
+    roles: {
+      type: Array<Role>,
+      default: Role.USER
+    },
     $isDeleted: {
       type: Boolean,
       default: false
-    },
+    }
   },
   {
     toObject: {
