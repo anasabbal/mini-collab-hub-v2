@@ -1,8 +1,8 @@
-import { ConflictException, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./schema/user-schema";
 import { Model } from "mongoose";
-import { UserDto } from "./dto/user-dto";
+import { RegisterCommand } from "src/auth/command/register-command";
 
 
 @Injectable()
@@ -29,18 +29,19 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found !`);
     return user;
   }
-  async createUser(user: User): Promise<string> {
+  async createUser(user: RegisterCommand) {
     try {
       if(!await this.userModel.findOne({email: user.email})){
         const newUser = new this.userModel(user);
         this.logger.log(`User with payload ${newUser} created successfully !`)
         await newUser.save();
-        return "User created successfully !";
+        return {
+          statusCode: 200,
+          message: 'Register Successfull',
+        };
       }
-      return "User Already exist";
     } catch(error){
-      if(error.code === 11000)
-        throw new ConflictException("User with this username or email already exists");
+      throw new HttpException('User already registered', HttpStatus.FOUND);
     }
   }
   async deleteById(id: string): Promise<boolean> {

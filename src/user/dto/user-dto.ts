@@ -19,4 +19,12 @@ export class UserDto {
 
         return userDto;
     }
+    async toListDto(users: User[]): Promise<UserDto[]> {
+        const userDtos: UserDto[] = [];
+        for(const user of users){
+            const userDto = await this.toDto(user);
+            userDtos.push(userDto);
+        }
+        return userDtos;
+    }
 }

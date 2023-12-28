@@ -1,6 +1,5 @@
 import * as mongoose from "mongoose";
 import * as bcrypt from 'bcrypt';
-import { UserService } from "../user-service";
 import { Role } from "src/enums/role.enums";
 
 
