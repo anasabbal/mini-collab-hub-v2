@@ -50,4 +50,7 @@ export class AuthService {
   async login(req: LoginCommand) {
     return this.validate(req.email, req.password);
   }
+  async profile(user_id: string) {
+    return await this.userService.getUserById(user_id);
+  }
 }
