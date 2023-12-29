@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { UserService } from "./user-service";
 import { UserDto } from "./dto/user-dto";
-import { Roles } from "src/decorator/roles.decorator";
-import { Role } from "src/enums/role.enums";
+import { AuthGuard } from "src/auth/guard/auth-guard";
 
 @Controller('user')
 export class UserController {
@@ -11,7 +10,7 @@ export class UserController {
   ) {}
 
   @Get()
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   async getAllUsers(): Promise<UserDto[]> {
     const users = await this.userService.getAllUser();
     const userDto =  new UserDto();
@@ -19,14 +18,14 @@ export class UserController {
     return userDtoList;
   }
   @Get(':id')
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   async getUserById(@Param('id') id: string): Promise<UserDto> {
     const user = await this.userService.getUserById(id);  // Wait for the Promise to resolve
     const userDto = new UserDto();
     return userDto.toDto(user);
   }
   @Delete(':id')
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   async deleteByOd(id: string): Promise<string> {
     if(await this.userService.deleteById(id))
       return "User deleted !";

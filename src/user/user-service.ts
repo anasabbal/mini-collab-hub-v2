@@ -2,7 +2,10 @@ import { ConflictException, HttpException, HttpStatus, Injectable, Logger, NotFo
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./schema/user-schema";
 import { Model } from "mongoose";
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterCommand } from "src/auth/command/register-command";
+import { UserEntity } from "./schema/user-entity";
 
 
 @Injectable()
